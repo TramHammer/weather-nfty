@@ -1,7 +1,7 @@
 let cron = require("node-cron")
 let now = new Date()
 const topic = ''
-const location = "https://api.weather.gov/points/47.1169,-88.5448"
+const location = ""
 let locationGridPoint = ""
 let cityLocation = "" 
 
