@@ -31,7 +31,8 @@ Use this space to show useful examples of how a project can be used. Additional 
 1. Update `main.js` to the correct ntfy topic that you are subscribed to
 2. Update node-chron to push notifications when you want to
 3. Update your location in the `location` variable
-4. Run ```sh
+4. Run 
+   ```sh
    docker run --rm -d -p 5001:5001/tcp weatherntfy:latest
    ```
    or run 
