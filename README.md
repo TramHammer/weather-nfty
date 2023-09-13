@@ -18,6 +18,10 @@ _Below is an example of how you can instruct your audience on installing and set
    git clone https://github.com/TramHammer/weather-ntfy
    ```
    or download the [repo](https://github.com/TramHammer/weather-ntfy/releases/new)
+2. Install packages
+   ```sh
+   npm install node-cron
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## How to use
