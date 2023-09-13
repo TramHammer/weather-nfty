@@ -6,15 +6,25 @@ let locationGridPoint = ""
 let cityLocation = "" 
 
 cron.schedule('0 7 * * *', () => {
-    run()
+    runMorning()
 });
 
-async function run() {
+cron.schedule('1 12 * * *', () => {
+    runAfternoon()
+});
+async function runMorning() {
     await getPreliminaryData(location)
     getForecast(locationGridPoint, 0)
     getForecast(locationGridPoint, 1)
     getForecast(locationGridPoint, 2)
     console.log('\x1b[35m%s\x1b[0m',`[PUSH] `,'\x1b[0m',`Successfully sent message ${now.toDateString()}`)
+}
+
+async function runAfternoon() {
+    await getPreliminaryData(location)
+    getForecast(locationGridPoint, 0)
+    console.log('\x1b[35m%s\x1b[0m',`[PUSH] `,'\x1b[0m',`Successfully sent message ${now.toDateString()}`)
+
 }
 
 function postNotification(forecast, err) {
