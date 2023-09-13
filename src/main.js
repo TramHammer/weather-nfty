@@ -1,8 +1,10 @@
-let cron = require("node-cron")
-let now = new Date()
 const topic = ''
 const location = ""
-let locationGridPoint = ""
+
+//DO NOT CHANGE
+let cron = require("node-cron")
+let now = new Date()
+let locationGridPoint = "" 
 let cityLocation = "" 
 
 cron.schedule('0 7 * * *', () => {
