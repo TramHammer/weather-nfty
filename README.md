@@ -20,7 +20,7 @@ _Below is an example of how you can instruct your audience on installing and set
    or download the [repo](https://github.com/TramHammer/weather-ntfy/releases/new)
 2. Install packages
    ```sh
-   npm install node-cron
+   npm install node-cron express
    ```
 
 <!-- USAGE EXAMPLES -->
