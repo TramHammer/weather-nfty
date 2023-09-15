@@ -1,22 +1,31 @@
 let now = new Date()
-const topic = ''
-const location = ""
-let locationGridPoint = ""
+const topic = '' //this should be the ntfy topic
+const location = "" //the location should be https://api.weather.gov/points/{lat},{long} and should be rounded to the 4th decimal place
+//DO NOT CHANGE
+let locationGridPoint = "" 
 let cityLocation = "" 
 
 export default { runAfternoon, runMorning}
 
 async function runMorning() {
     await getPreliminaryData(location)
-    getForecast(locationGridPoint, 0)
-    getForecast(locationGridPoint, 1)
-    getForecast(locationGridPoint, 2)
+    if (!getForecast(locationGridPoint, 0)) {
+        getForecast(locationGridPoint, 0)
+    }
+    if (!getForecast(locationGridPoint, 1)) {
+        getForecast(locationGridPoint, 1)
+    }
+    if (!getForecast(locationGridPoint, 2)) {
+        getForecast(locationGridPoint, 2)
+    }
     console.log('\x1b[35m%s\x1b[0m',`[PUSH] `,'\x1b[0m',`Successfully sent message ${now.toDateString()}`)
 }
 
 async function runAfternoon() {
     await getPreliminaryData(location)
-    getForecast(locationGridPoint, 0)
+    if (!getForecast(locationGridPoint, 0)) {
+        getForecast(locationGridPoint, 0)
+    }
     console.log('\x1b[35m%s\x1b[0m',`[PUSH] `,'\x1b[0m',`Successfully sent message ${now.toDateString()}`)
 
 }
@@ -50,6 +59,7 @@ async function getPreliminaryData(url) {
             },
             body: "Status: " +  request.status
         })
+        getPreliminaryData(location)
         return
     } else {
         console.log('\x1b[35m%s\x1b[0m',`[getPreliminaryData] `,'\x1b[0m', "Network Response is OK\nStatus: ", request.status)
@@ -76,7 +86,7 @@ async function getForecast(url, period) {
             },
             body: "Status: " +  request.status
         }) 
-        return
+        return false
     } else {
         console.log('\x1b[35m%s\x1b[0m',`[getForecast] `,"Network Response is OK\nStatus: ", request.status)
         const data = await request.json()
@@ -109,5 +119,6 @@ async function getForecast(url, period) {
             "shortForecast" : JSON.stringify(prop.shortForecast).replace(/['"]+/g, '')
         }
         postNotification(forecast, false)
+        return true
     }
 }
