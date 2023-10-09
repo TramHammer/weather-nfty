@@ -1,21 +1,30 @@
 import weather from './src/forecast.js'
-import express from './src/express.js'
+import express from './src/uptimeKuma.js'
 import cron from "node-cron"
 
-console.log('\x1b[35m%s\x1b[0m',`[Initalized] `,'\x1b[0m',``)
+const topic = '' //nfty topic link
+const lat = "" //should be rounded to the 4th decimal place ex. -88.5448
+const long = "" //should be rounded to the 4th decimal place
+const retryAttempts = 4; //change this to a reasonable number of times you want it to retry until it determines that there is no proper connection to the API
 
-express.uptimeKumaIntegration()
+weather.setConfig(lat, long, topic, retryAttempts)
+//This is optional for uptime Kuma Integration
+express.uptimeKumaIntegration(5000)
 
+weather.initializeGridPointData()
+
+//This would post a notification on running devices local time at 7 AM
 cron.schedule('0 7 * * *', () => {
     weather.runMorning()
 });
 
-cron.schedule('1 12 * * *', () => {
+//This would post a notification on running devices local time at 12 PM
+cron.schedule('0 12 * * *', () => {
     weather.runAfternoon()
 });
 
+//This would post a notification on running devices local time at 6 PM
 cron.schedule('0 18 * * *', () => {
     weather.runAfternoon()
 });
-
 
