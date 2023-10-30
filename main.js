@@ -34,4 +34,8 @@ cron.schedule('*/10 * * * *', () => {
     weather.getAlerts()
 })
 
+//This would clear alert table every week on Sunday
+cron.schedule('0 0 * * 0', () => {
+    weather.clearAlertTable()
+})
 
