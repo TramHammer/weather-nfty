@@ -10,7 +10,7 @@ let alerts = []
 let link = ""
 let shortAlert = null
 
-export default { setConfig, initializeGridPointData, runAfternoon, runMorning, getAlerts }
+export default { setConfig, initializeGridPointData, runAfternoon, runMorning, getAlerts, clearAlertTable }
 
 function setConfig(latitude, longitude, nftyTopic, retryAttempts, shortAlerts) {
     topic = nftyTopic
@@ -21,6 +21,11 @@ function setConfig(latitude, longitude, nftyTopic, retryAttempts, shortAlerts) {
     alertLocation = "https://api.weather.gov/alerts/active?point=" + latitude + "," + longitude
     console.log('\x1b[35m%s\x1b[0m',`[Initalized] `,'\x1b[0m',``)
 }
+
+function clearAlertTable() {
+    alerts = []
+}
+
 /*
 Establishes the correct gridPoint based on the latitude and longitude based on the passed values in setConfig
 */
