@@ -50,7 +50,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 <!-- ROADMAP -->
 ## Roadmap
-- [ ] NWS Alerts Push
+- [x] NWS Alerts Push
 - [ ] NOAA Products API integration
 
 See the [open issues](https://github.com/TramHammer/weather-ntfy/issues) for a full list of proposed features (and known issues).
