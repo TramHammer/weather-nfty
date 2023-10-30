@@ -4,14 +4,21 @@ let topic = ""
 let locationGridPoint = ""
 let cityLocation = ""
 let location = ""
+let alertLocation = ""
 let retrys = 0;
+let alerts = []
+let link = ""
+let shortAlert = null
 
-export default { setConfig, initializeGridPointData, runAfternoon, runMorning }
+export default { setConfig, initializeGridPointData, runAfternoon, runMorning, getAlerts }
 
-function setConfig(latitude, longitude, nftyTopic, retryAttempts) {
+function setConfig(latitude, longitude, nftyTopic, retryAttempts, shortAlerts) {
     topic = nftyTopic
+    shortAlert = shortAlerts
     retrys = retryAttempts
+    link = "https://forecast.weather.gov/MapClick.php?lat=" + latitude + "&lon=" + longitude
     location = "https://api.weather.gov/points/" + latitude + "," + longitude
+    alertLocation = "https://api.weather.gov/alerts/active?point=" + latitude + "," + longitude
     console.log('\x1b[35m%s\x1b[0m',`[Initalized] `,'\x1b[0m',``)
 }
 /*
@@ -68,17 +75,100 @@ async function runAfternoon() {
 /*
 nfty post notification method, designed for Andriod w/support for Icon
 */
-async function postNotification(forecast) {
+async function postNotification(forecast, type) {
+    if (type) {
+        if (!shortAlert) {
+            fetch(topic, {
+                method: 'POST',
+                headers: {
+                    'Icon': "https://www.shareicon.net/data/512x512/2015/08/18/86945_warning_512x512.png",
+                    'Title': forecast.name + " - " + forecast.sender,
+                    'Priority': "4",
+                    'Tags': forecast.id,
+                    'Actions': `view, Open weather.gov, ${link}`
+                },
+                body: forecast.description + "\n\n" + forecast.instructions
+            })
+        } else {
+            fetch(topic, {
+                method: 'POST',
+                headers: {
+                    'Icon': "https://www.shareicon.net/data/512x512/2015/08/18/86945_warning_512x512.png",
+                    'Title': forecast.name + " - " + forecast.sender,
+                    'Priority': "4",
+                    'Tags': forecast.id,
+                    'Actions': `view, Open weather.gov, ${link}`
+                },
+                body: forecast.headline + "\n\n" + forecast.instructions
+            })
+        }
+    } else {
+        fetch(topic, {
+            method: 'POST',
+            headers: {
+                'Icon': forecast.icon,
+                'Title': cityLocation + " - " + forecast.name,
+                'Priority': "3"
+            },
+            body: forecast.temperature + "°F • " + forecast.shortForecast + " • " + forecast.wind
+        }) 
+    }
+}
+
+/*
+Gets alert information based on alert link
+*/
+async function getAlerts() {
+    let requestCount = 0;
+    do {
+        const request = await fetch(alertLocation, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        if (!request.ok) {
+            console.log("Failed " + requestCount + " times " + location)
+            requestCount++
+            setTimeout(1000)
+            continue;
+        } else {
+            console.log('\x1b[35m%s\x1b[0m', `[getAlerts()] `, `Network Response is OK : getAlerts()\nStatus: `, request.status)
+            const data = await request.json()
+
+            for (let i = 0; i < Object.keys(data.features).length; i++) {
+                let information = data.features[i].properties;
+
+                const alert = {
+                    "name": JSON.stringify(information.event).replace(/['"]+/g, ''),
+                    "description": (information.description),
+                    "instructions":  (information.instruction),
+                    "headline": JSON.stringify(information.headline).replace(/['"]+/g, ''),
+                    "effective":  JSON.stringify(information.effective).replace(/['"]+/g, ''),
+                    "expires":  JSON.stringify(information.expires).replace(/['"]+/g, ''),
+                    "sender":  JSON.stringify(information.senderName).replace(/['"]+/g, ''),
+                    "id": JSON.stringify(information.id).replace(/['"]+/g, ''),
+                }
+                if (!alerts.includes(alert.id)) {
+                    postNotification(alert, true)
+                    alerts.push(alert.id)
+                }
+            }
+            return true
+        }
+    } while (requestCount < retrys)
     fetch(topic, {
         method: 'POST',
         headers: {
-            'Icon': forecast.icon,
-            'Title': cityLocation + " - " + forecast.name,
-            'Priority': "3"
+            'Title': "Network response is not OK",
+            'Priority': "4"
         },
-        body: forecast.temperature + "°F • " + forecast.shortForecast + " • " + forecast.wind
+        body: "getForecast() failed after " + retrys
     })
+    return false
+
 }
+
 
 /*
 Gets the forecast based on the period using locationGridPoint
@@ -141,5 +231,3 @@ async function getForecast(period) {
     })
     return false
 }
-
-
