@@ -33,7 +33,8 @@ Use this space to show useful examples of how a project can be used. Additional 
    2. `long` - This should be the longitude of the location - should be rounded to the 4th decimal place
    3. `topic` - This should the nfty topic link in full
    4. `retryAttempts` - This should be the amount of times that it should attempt to load the API(please use reasonable values)
-   5. Update node-chron to push notifications when you want to
+   5. `shortAlerts` - This if you want the full alert description in your notification(this will not load the entire description depending on the length of the alert)
+   6. Update node-chron to push notifications when you want to
 4. Run 
    ```sh
    docker run --rm -d -p 5001:5001/tcp weatherntfy:latest
