@@ -135,7 +135,6 @@ async function getAlerts() {
         if (!request.ok) {
             console.log("Failed " + requestCount + " times " + location)
             requestCount++
-            setTimeout(1000)
             continue;
         } else {
             console.log('\x1b[35m%s\x1b[0m', `[getAlerts()] `, `Network Response is OK : getAlerts()\nStatus: `, request.status)
