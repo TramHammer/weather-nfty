@@ -22,6 +22,27 @@ _Below is an example of how you can instruct your audience on installing and set
    ```sh
    npm install node-cron node-fetch express
    ```
+3. Docker 
+   Docker Compose
+   ```yml
+      version: '3.4'
+   
+   services:
+     weatherntfy:
+       image: weatherntfy
+       build:
+         context: .
+         dockerfile: ./Dockerfile
+       environment:
+         NODE_ENV: production
+       ports:
+         - 5823:5823
+
+   ```
+   or Docker
+   ```sh
+   docker run --rm -d -p 5823:5823/tcp weatherntfy:latest 
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## How to use
