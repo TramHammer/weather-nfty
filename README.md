@@ -58,7 +58,7 @@ Use this space to show useful examples of how a project can be used. Additional 
    6. Update node-chron to push notifications when you want to
 4. Run 
    ```sh
-   docker run --rm -d -p 5001:5001/tcp weatherntfy:latest
+   docker run --rm -d -p 5823:5823/tcp weatherntfy:latest
    ```
    or run 
    ```sh
