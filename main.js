@@ -14,8 +14,8 @@ const shortAlerts = true
 // Change to true if you want to see server errors pushed as notifications
 const pushMobileErrors = true 
 
-//This is optional for uptime Kuma Integration, the default port will be 5000
-express.uptimeKumaIntegration(5000)
+//This is optional for uptime Kuma Integration, the default port will be 5823
+express.uptimeKumaIntegration(5823)
 
 weather.setConfig(lat, long, topic, shortAlerts, pushMobileErrors)
 
